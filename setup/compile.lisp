@@ -38,8 +38,9 @@
 	      (dolist (d directories)
 		(push (make-pathname :directory d) asdf:*central-registry*))))))
 
-;;; App can redefine this to do runtime initializations
-(defun initialize-application ())
+(defun heroku-run ()
+  (setf ql:*quicklisp-home* (merge-pathnames "ros/.roswell/lisp/quicklisp/" *default-pathname-defaults*))
+  (heroku-toplevel))
 
 ;;; Default toplevel, app can redefine.
 (defun heroku-toplevel ()
@@ -57,9 +58,9 @@
 (defun h-save-app (app-file)
   #+ccl (save-application app-file
         :prepend-kernel t
-        :toplevel-function #'heroku-toplevel)
+        :toplevel-function #'heroku-run)
   #+sbcl (sb-ext:save-lisp-and-die app-file
-        :toplevel #'heroku-toplevel
+        :toplevel #'heroku-run
         :executable t))
 
 (let ((app-file (format nil "~A/lispapp" (heroku-getenv "BUILD_DIR")))) ;must match path specified in bin/release

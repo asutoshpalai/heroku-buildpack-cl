@@ -48,6 +48,9 @@ ROSWELL_BR=master
 
 ROS_COMMAND=$USR_DIR/bin/ros
 
+export ROSWELL_HOME=$BUILD_DIR/ros
+mkdir -p $ROSWELL_HOME
+
 if [ ! -f $ROS_COMMAND ]; then
   mkdir -p $USR_DIR
   mkdir -p $USR_DIR/bin
